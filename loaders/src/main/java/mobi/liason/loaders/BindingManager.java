@@ -7,6 +7,7 @@ import android.content.Loader;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.google.common.collect.Lists;
@@ -107,6 +108,9 @@ public class BindingManager implements LoaderCallbacks<Cursor> {
         for (final ForceLoadCursorLoader forceLoadCursorLoader : forceLoadCursorLoaders) {
             final ContentObserver contentObserver = forceLoadCursorLoader.getForceLoadContentObserver();
             context.getContentResolver().unregisterContentObserver(contentObserver);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                forceLoadCursorLoader.cancelLoadInBackground();
+            }
         }
     }
 
